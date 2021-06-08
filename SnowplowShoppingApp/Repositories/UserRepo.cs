@@ -29,10 +29,10 @@ namespace SnowplowShoppingApp.Repositories
         /// false: if email and password don't match
         /// </summary>
         /// <returns>bool</returns>
-        public async Task<bool> LoginAsync(string email, string password)
+        public async Task<User> LoginAsync(string email, string password)
         {
             //mimic async execution with Task.FromResult
-            return await Task.FromResult(_users.Any(x => x.Email == email && x.Password == password));
+            return await Task.FromResult(_users.FirstOrDefault(x => x.Email == email && x.Password == password));
         }
 
         private void SeedInitialUsers()

@@ -3,6 +3,7 @@ import {Route} from "react-router";
 import {Layout} from "./components/Layout";
 import Cart from "./components/Cart/Cart";
 import ProductsList from "./components/Product/ProductsList";
+import Login from "./components/Login";
 
 import "./custom.css";
 
@@ -51,6 +52,9 @@ export default class App extends Component {
             items={this.state.cartItems}
             removeCartItem={this.removeCartItem}
           />
+        </Route>
+        <Route path="/login">
+          <Login />
         </Route>
       </Layout>
     );

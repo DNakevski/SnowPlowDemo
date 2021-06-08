@@ -1,4 +1,4 @@
-const BASE_URL = "https://localhost:44312";
+import {BASE_URL} from "../constants";
 
 export async function getAllProducts() {
   const response = await fetch(BASE_URL + "/api/products");

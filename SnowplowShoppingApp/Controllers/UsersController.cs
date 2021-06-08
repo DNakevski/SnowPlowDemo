@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -25,6 +26,16 @@ namespace SnowplowShoppingApp.Controllers
         public async Task<IEnumerable<User>> GetAllUsers()
         {
             return await _userRepo.GetAllUsersAsync();
+        }
+
+        [HttpPost ("login")]
+        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
+        {
+            var user = await _userRepo.LoginAsync(loginModel.Email, loginModel.Password);
+            if (user == null)
+                return BadRequest("Invalid email or password");
+
+            return Ok(user);
         }
     }
 }
