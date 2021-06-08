@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.14" />
+    <PackageReference Include="Snowplow.Tracker" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>

@@ -230,3 +230,7 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+#LiteDb storage files
+events.db
+events-journal.db
