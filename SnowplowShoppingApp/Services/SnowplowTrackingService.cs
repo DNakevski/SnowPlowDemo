@@ -42,7 +42,7 @@ namespace SnowplowShoppingApp.Services
             }
         }
 
-        public void TrackUserLogin(string userEmail)
+        public void TrackUserLoginEvent(string userEmail)
         {
             TrackerInstance.Track(new Structured()
                 .SetCategory("users")
@@ -53,7 +53,7 @@ namespace SnowplowShoppingApp.Services
                 .Build());
         }
 
-        public void TrackUserLogout(string userEmail)
+        public void TrackUserLogoutEvent(string userEmail)
         {
             TrackerInstance.Track(new Structured()
                 .SetCategory("users")
@@ -64,7 +64,7 @@ namespace SnowplowShoppingApp.Services
                 .Build());
         }
 
-        public void TrackUserUnsuccessfulLogin(string userEmail)
+        public void TrackUserUnsuccessfulLoginEvent(string userEmail)
         {
             TrackerInstance.Track(new Structured()
                 .SetCategory("users")
@@ -75,7 +75,7 @@ namespace SnowplowShoppingApp.Services
                 .Build());
         }
 
-        public void TrackPageView(string pageUrl, string pageTitle)
+        public void TrackPageViewEvent(string pageUrl, string pageTitle)
         {
             TrackerInstance.Track(new PageView()
                 .SetPageUrl(pageUrl)
@@ -85,7 +85,7 @@ namespace SnowplowShoppingApp.Services
 
         }
 
-        public void TrackUserOrder(User user, List<CartItem> items)
+        public void TrackUserOrderEvent(User user, List<CartItem> items)
         {
             var eCommerceTransactionItems = new List<EcommerceTransactionItem>();
             foreach (var item in items)
@@ -113,6 +113,24 @@ namespace SnowplowShoppingApp.Services
                 .SetItems(eCommerceTransactionItems)
                 .SetTrueTimestamp(new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds())
                 .Build());
+        }
+
+        public void TrackCartActionEvent(Guid userId, Product product, int quantity, string action)
+        {
+            var productSku = $"{product.Category}-{product.ProductName}-{product.ProductId}";
+
+            var eventDict = new Dictionary<string, object>();
+            eventDict.Add("product_sku", productSku);
+            eventDict.Add("user_id", userId.ToString());
+            eventDict.Add("price", product.Price);
+            eventDict.Add("quantity", quantity);
+            eventDict.Add("action", action);
+
+            var eventData = new SelfDescribingJson("iglu:self.host.iglu/cart_action_event/jsonschema/1-0-0", eventDict);
+            TrackerInstance.Track(new SelfDescribing()
+                .SetEventData(eventData)
+                .Build());
+            ;
         }
     }
 }

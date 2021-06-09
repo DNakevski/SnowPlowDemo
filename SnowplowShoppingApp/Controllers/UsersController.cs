@@ -31,16 +31,20 @@ namespace SnowplowShoppingApp.Controllers
         {
             var user = await _userRepo.LoginAsync(loginModel.Email, loginModel.Password);
             if (user == null)
+            {
+                _trackingService.TrackUserUnsuccessfulLoginEvent(loginModel.Email);
                 return BadRequest("Invalid email or password");
+            }
+                
 
-            _trackingService.TrackUserLogin(loginModel.Email);
+            _trackingService.TrackUserLoginEvent(loginModel.Email);
             return Ok(user);
         }
 
         [HttpPost("logout")]
         public IActionResult Logout([FromBody] LogoutModel logoutModel)
         {
-            _trackingService.TrackUserLogout(logoutModel.Email);
+            _trackingService.TrackUserLogoutEvent(logoutModel.Email);
             return Ok();
         }
     }

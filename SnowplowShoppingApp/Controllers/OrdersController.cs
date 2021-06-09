@@ -48,6 +48,8 @@ namespace SnowplowShoppingApp.Controllers
                 Quantity = addToCartModel.Quantity
             });
 
+            _trackingService.TrackCartActionEvent(userId, product, addToCartModel.Quantity, "add");
+
             return Ok();
         }
 
@@ -60,11 +62,13 @@ namespace SnowplowShoppingApp.Controllers
         [HttpDelete("cartitems")]
         public ActionResult RemoveFromCart([FromQuery] Guid userId, [FromQuery] Guid productId)
         {
-            var product = CartItems[userId]?.FirstOrDefault(x => x.Product.ProductId == productId);
-            if (product == null)
+            var cartItem = CartItems[userId]?.FirstOrDefault(x => x.Product.ProductId == productId);
+            if (cartItem == null)
                 return BadRequest("Some of the parameters are not valid!");
 
-            CartItems[userId].Remove(product);
+            CartItems[userId].Remove(cartItem);
+
+            _trackingService.TrackCartActionEvent(userId, cartItem.Product, cartItem.Quantity, "remove");
             return Ok();
         }
 
@@ -77,7 +81,7 @@ namespace SnowplowShoppingApp.Controllers
             //track the order
             var user = await _usersRepo.GetUserByIdAsync(makeOrderModel.UserId);
             var items = CartItems[user.UserId];
-            _trackingService.TrackUserOrder(user, items);
+            _trackingService.TrackUserOrderEvent(user, items);
 
             CartItems.Remove(makeOrderModel.UserId);
             return Ok();

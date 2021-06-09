@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using SnowplowShoppingApp.Models;
 
 namespace SnowplowShoppingApp.Services
 {
     public interface ITrackingService
     {
-        void TrackUserLogin(string userEmail);
-        void TrackUserLogout(string userEmail);
-        void TrackUserUnsuccessfulLogin(string userEmail);
+        void TrackUserLoginEvent(string userEmail);
+        void TrackUserLogoutEvent(string userEmail);
+        void TrackUserUnsuccessfulLoginEvent(string userEmail);
 
-        void TrackPageView(string pageUrl, string pageTitle);
+        void TrackPageViewEvent(string pageUrl, string pageTitle);
 
-        void TrackUserOrder(User user, List<CartItem> items);
+        void TrackUserOrderEvent(User user, List<CartItem> items);
+        void TrackCartActionEvent(Guid userId, Product product, int quantity, string action);
     }
 }
