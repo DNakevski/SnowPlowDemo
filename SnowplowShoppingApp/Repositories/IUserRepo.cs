@@ -9,6 +9,7 @@ namespace SnowplowShoppingApp.Repositories
     public interface IUserRepo
     {
         Task<IEnumerable<User>> GetAllUsersAsync();
+        Task<User> GetUserByIdAsync(Guid userId);
         Task<User> LoginAsync(string email, string password);
     }
 }

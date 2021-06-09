@@ -1,4 +1,4 @@
-import {BASE_URL} from "../constants";
+import {BASE_URL, LOGGED_USER} from "../constants";
 
 export async function login(email, password) {
   const response = await fetch(BASE_URL + "/api/users/login", {
@@ -22,4 +22,11 @@ export async function logout(email) {
     body: JSON.stringify({email: email}),
   });
   return await response;
+}
+
+export function getLoggedInUser() {
+  let loggedInUser = localStorage.getItem(LOGGED_USER);
+  if (loggedInUser === null) return null;
+
+  return JSON.parse(loggedInUser);
 }

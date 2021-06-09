@@ -25,6 +25,14 @@ namespace SnowplowShoppingApp.Repositories
         }
 
         /// <summary>
+        /// Returns user by id
+        /// </summary>
+        public async Task<User> GetUserByIdAsync(Guid userId)
+        {
+            return await Task.FromResult(_users.FirstOrDefault(x => x.UserId == userId));
+        }
+
+        /// <summary>
         /// true: if email and password match
         /// false: if email and password don't match
         /// </summary>
@@ -41,7 +49,7 @@ namespace SnowplowShoppingApp.Repositories
             {
                 new User
                 {
-                    UserId = Guid.NewGuid(),
+                    UserId = new Guid("111B0228-4D0D-4C23-8B49-01A698857709"),
                     Name = "Scott",
                     Surname = "Walker",
                     Email = "scott@mail.com",
@@ -49,7 +57,7 @@ namespace SnowplowShoppingApp.Repositories
                 },
                 new User
                 {
-                    UserId = Guid.NewGuid(),
+                    UserId = new Guid("222B0228-4D0D-4C23-8B49-01A698857709"),
                     Name = "Scott",
                     Surname = "Walker",
                     Email = "scott@mail.com",
@@ -57,7 +65,7 @@ namespace SnowplowShoppingApp.Repositories
                 },
                 new User
                 {
-                    UserId = Guid.NewGuid(),
+                    UserId = new Guid("333B0228-4D0D-4C23-8B49-01A698857709"),
                     Name = "Alice",
                     Surname = "Williams",
                     Email = "alice@mail.com",

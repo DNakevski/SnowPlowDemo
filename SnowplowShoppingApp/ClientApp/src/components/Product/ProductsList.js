@@ -8,7 +8,6 @@ const ProductsList = (props) => {
 
   const fetchProducts = () => {
     getAllProducts().then((products) => {
-      console.log(products);
       setProducts(products);
       setLoading(false);
     });

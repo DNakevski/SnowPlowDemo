@@ -38,7 +38,7 @@ export class NavMenu extends Component {
     const cartItems = localStorage.getItem("cart-items");
     let cCount = 0;
     if (cartItems !== null) {
-      cCount = JSON.parse(cartItems).length;
+      cCount = parseInt(localStorage.getItem("cart-items"));
     }
 
     return (

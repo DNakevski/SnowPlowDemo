@@ -5,8 +5,8 @@ const Cart = (props) => {
   const {enqueueSnackbar} = useSnackbar();
 
   const renderItems = () => {
-    return props.items.map((item) => (
-      <div className="alert alert-info" key={item.product.productId}>
+    return props.items.map((item, index) => (
+      <div className="alert alert-info" key={index}>
         <button
           type="button"
           className="close"

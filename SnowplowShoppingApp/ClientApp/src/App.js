@@ -5,6 +5,12 @@ import Cart from "./components/Cart/Cart";
 import ProductsList from "./components/Product/ProductsList";
 import Login from "./components/Login";
 import {PrivateRoute} from "./hoc/PrivateRoute";
+import {getLoggedInUser} from "./services/UserService";
+import {
+  getCartItemsForUser,
+  addToCart,
+  removeFromCart,
+} from "./services/OrderService";
 
 import "./custom.css";
 
@@ -12,35 +18,57 @@ export default class App extends Component {
   static displayName = App.name;
 
   constructor(props) {
-    let cartItems = localStorage.getItem("cart-items");
-    if (cartItems === null) {
-      cartItems = [];
-    } else {
-      cartItems = JSON.parse(cartItems); //convert them from JSON to array
-    }
-
     super(props);
     this.state = {
-      cartItems: cartItems,
+      cartItems: [],
       isUserLoggedIn: false,
     };
   }
 
-  addToCart = (product, quantity) => {
+  componentDidMount() {
+    const user = getLoggedInUser();
+    //get all cart items
+
+    if (user !== null) {
+      getCartItemsForUser(user.userId).then((items) => {
+        let cartItems = [];
+        items.map((item) => {
+          cartItems.push({
+            userId: item.userId,
+            product: item.product,
+            quantity: item.quantity,
+          });
+        });
+
+        localStorage.setItem("cart-items", cartItems.length);
+        this.setState({cartItems: cartItems});
+      });
+    }
+  }
+
+  addProductToCart = (product, quantity) => {
+    quantity = parseInt(quantity);
+    const user = getLoggedInUser();
     const tmpCartItems = this.state.cartItems;
     const newCartItem = {
+      userId: user.userId,
       product: product,
       quantity: quantity,
     };
-    tmpCartItems.push(newCartItem);
-    localStorage.setItem("cart-items", JSON.stringify(tmpCartItems));
-    this.setState({cartItems: tmpCartItems});
+
+    addToCart(user.userId, product.productId, quantity).then((response) => {
+      tmpCartItems.push(newCartItem);
+      localStorage.setItem("cart-items", tmpCartItems.length);
+      this.setState({cartItems: tmpCartItems});
+    });
   };
 
   removeCartItem = (item) => {
-    const tmpCartItems = this.state.cartItems.filter((x) => x !== item);
-    localStorage.setItem("cart-items", JSON.stringify(tmpCartItems));
-    this.setState({cartItems: tmpCartItems});
+    removeFromCart(item.userId, item.product.productId).then((response) => {
+      const tmpCartItems = this.state.cartItems.filter((x) => x !== item);
+      localStorage.setItem("cart-items", tmpCartItems.length);
+      this.setState({cartItems: tmpCartItems});
+    });
   };
 
   setUserLoggedIn = (isLoggedIn) => {
@@ -54,7 +82,7 @@ export default class App extends Component {
           exact={true}
           path="/"
           render={(props) => (
-            <ProductsList {...props} addToCart={this.addToCart} />
+            <ProductsList {...props} addToCart={this.addProductToCart} />
           )}
         />
         <PrivateRoute

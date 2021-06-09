@@ -9,5 +9,6 @@ namespace SnowplowShoppingApp.Repositories
     public interface IProductsRepo
     {
         Task<IEnumerable<Product>> GetAllProductsAsync();
+        Task<Product> GetProductByIdAsync(Guid productId);
     }
 }

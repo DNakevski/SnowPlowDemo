@@ -1,6 +1,7 @@
 ﻿using SnowplowShoppingApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SnowplowShoppingApp.Repositories
@@ -18,6 +19,11 @@ namespace SnowplowShoppingApp.Repositories
         {
             //mimic async execution with Task.FromResult
             return await Task.FromResult(_products);
+        }
+
+        public async Task<Product> GetProductByIdAsync(Guid productId)
+        {
+            return await Task.FromResult(_products.FirstOrDefault(x => x.ProductId == productId));
         }
 
         private void SeedInitialProducts()
