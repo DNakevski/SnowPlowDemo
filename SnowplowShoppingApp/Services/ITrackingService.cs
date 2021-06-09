@@ -10,5 +10,7 @@ namespace SnowplowShoppingApp.Services
         void TrackUserLogin(string userEmail);
         void TrackUserLogout(string userEmail);
         void TrackUserUnsuccessfulLogin(string userEmail);
+
+        void TrackPageView(string pageUrl, string pageTitle);
     }
 }

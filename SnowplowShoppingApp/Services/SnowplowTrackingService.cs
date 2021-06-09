@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Snowplow.Tracker;
 using Snowplow.Tracker.Emitters;
@@ -74,6 +71,16 @@ namespace SnowplowShoppingApp.Services
                 .SetProperty("user-email")
                 .SetTrueTimestamp(new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds())
                 .Build());
+        }
+
+        public void TrackPageView(string pageUrl, string pageTitle)
+        {
+            TrackerInstance.Track(new PageView()
+                .SetPageUrl(pageUrl)
+                .SetPageTitle(pageTitle)
+                .SetTrueTimestamp(new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds())
+                .Build());
+
         }
     }
 }
