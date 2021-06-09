@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Options;
 using Snowplow.Tracker;
 using Snowplow.Tracker.Emitters;
@@ -81,6 +83,36 @@ namespace SnowplowShoppingApp.Services
                 .SetTrueTimestamp(new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds())
                 .Build());
 
+        }
+
+        public void TrackUserOrder(User user, List<CartItem> items)
+        {
+            var eCommerceTransactionItems = new List<EcommerceTransactionItem>();
+            foreach (var item in items)
+            {
+                eCommerceTransactionItems.Add(new EcommerceTransactionItem()
+                    .SetSku($"{item.Product.Category}-{item.Product.ProductName}-{item.Product.ProductId}")
+                    .SetPrice(item.Product.Price)
+                    .SetQuantity(item.Quantity)
+                    .SetName(item.Product.ProductName)
+                    .SetCategory(item.Product.Category)
+                    .Build());
+            }
+
+            var orderId = new Guid().ToString();
+            var totalValue = items.Sum(x => x.Product.Price);
+
+            TrackerInstance.Track(new EcommerceTransaction()
+                .SetOrderId(orderId)
+                .SetTotalValue(totalValue)
+                .SetShipping(10)
+                .SetCurrency("GBP")
+                .SetCountry(user.Country)
+                .SetState(user.State)
+                .SetCity(user.City)
+                .SetItems(eCommerceTransactionItems)
+                .SetTrueTimestamp(new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds())
+                .Build());
         }
     }
 }

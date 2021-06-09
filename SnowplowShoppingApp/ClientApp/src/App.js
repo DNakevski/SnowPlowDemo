@@ -75,6 +75,12 @@ export default class App extends Component {
     this.setState({isUserLoggedIn: isLoggedIn});
   };
 
+  handleOrderPlaced = () => {
+    //clear the items when the order is placed
+    this.setState({cartItems: []});
+    localStorage.setItem("cart-items", 0);
+  };
+
   render() {
     return (
       <Layout>
@@ -92,6 +98,7 @@ export default class App extends Component {
             <Cart
               items={this.state.cartItems}
               removeCartItem={this.removeCartItem}
+              orderPlaced={this.handleOrderPlaced}
             />
           )}
         />

@@ -53,7 +53,10 @@ namespace SnowplowShoppingApp.Repositories
                     Name = "Scott",
                     Surname = "Walker",
                     Email = "scott@mail.com",
-                    Password = "Scott*123"
+                    Password = "Scott*123",
+                    City = "London",
+                    Country = "England",
+                    State = "England"
                 },
                 new User
                 {
@@ -61,7 +64,10 @@ namespace SnowplowShoppingApp.Repositories
                     Name = "Scott",
                     Surname = "Walker",
                     Email = "scott@mail.com",
-                    Password = "Scott*123"
+                    Password = "Scott*123",
+                    City = "Edinburgh",
+                    Country = "Scotland",
+                    State = "Scotland"
                 },
                 new User
                 {
@@ -69,7 +75,10 @@ namespace SnowplowShoppingApp.Repositories
                     Name = "Alice",
                     Surname = "Williams",
                     Email = "alice@mail.com",
-                    Password = "Alice*123"
+                    Password = "Alice*123",
+                    City = "Skopje",
+                    Country = "North Macedonia",
+                    State = "North Macedonia"
                 }
             };
         }

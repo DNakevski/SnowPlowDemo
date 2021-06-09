@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
 using SnowplowShoppingApp.Models;
 using SnowplowShoppingApp.Repositories;
+using SnowplowShoppingApp.Services;
 
 namespace SnowplowShoppingApp.Controllers
 {
@@ -19,10 +17,13 @@ namespace SnowplowShoppingApp.Controllers
         private readonly IUserRepo _usersRepo;
         private static readonly Dictionary<Guid, List<CartItem>> CartItems = new Dictionary<Guid, List<CartItem>>();
 
-        public OrdersController(IProductsRepo productsRepo, IUserRepo userRepo)
+        private readonly ITrackingService _trackingService;
+
+        public OrdersController(IProductsRepo productsRepo, IUserRepo userRepo, ITrackingService trackingService)
         {
             _productsRepo = productsRepo;
             _usersRepo = userRepo;
+            _trackingService = trackingService;
         }
 
         [HttpPost("cartitems")]
@@ -64,6 +65,21 @@ namespace SnowplowShoppingApp.Controllers
                 return BadRequest("Some of the parameters are not valid!");
 
             CartItems[userId].Remove(product);
+            return Ok();
+        }
+
+        [HttpPost("makeorder")]
+        public async Task<ActionResult> MakeOrder(MakeOrderModel makeOrderModel)
+        {
+            if (!CartItems.ContainsKey(makeOrderModel.UserId))
+                return BadRequest("The specified user doesn't exist");
+            
+            //track the order
+            var user = await _usersRepo.GetUserByIdAsync(makeOrderModel.UserId);
+            var items = CartItems[user.UserId];
+            _trackingService.TrackUserOrder(user, items);
+
+            CartItems.Remove(makeOrderModel.UserId);
             return Ok();
         }
     }

@@ -36,3 +36,14 @@ export async function removeFromCart(userId, productId) {
   );
   return await response;
 }
+
+export async function makeOrder(userId) {
+  const response = await fetch(BASE_URL + "/api/orders/makeorder", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify({userId: userId}),
+  });
+  return await response;
+}

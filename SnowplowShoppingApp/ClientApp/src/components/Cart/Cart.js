@@ -1,8 +1,20 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import {useSnackbar} from "notistack";
+import {makeOrder} from "../../services/OrderService";
+import {getLoggedInUser} from "../../services/UserService";
 
 const Cart = (props) => {
   const {enqueueSnackbar} = useSnackbar();
+
+  const handleOrderPlaced = () => {
+    const user = getLoggedInUser();
+    makeOrder(user.userId).then((response) => {
+      enqueueSnackbar("Order has been successfully made", {
+        variant: "success",
+      });
+      props.orderPlaced();
+    });
+  };
 
   const renderItems = () => {
     return props.items.map((item, index) => (
@@ -41,7 +53,20 @@ const Cart = (props) => {
           <em>There are no items in the Cart.</em>
         </p>
       ) : (
-        renderItems()
+        <div>
+          {renderItems()}
+          <div className="d-flex flex-row-reverse">
+            <div className="p-2">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleOrderPlaced}
+              >
+                Place the order
+              </button>
+            </div>
+          </div>
+        </div>
       );
 
     return contents;

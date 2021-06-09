@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SnowplowShoppingApp.Models;
 
 namespace SnowplowShoppingApp.Services
 {
@@ -12,5 +13,7 @@ namespace SnowplowShoppingApp.Services
         void TrackUserUnsuccessfulLogin(string userEmail);
 
         void TrackPageView(string pageUrl, string pageTitle);
+
+        void TrackUserOrder(User user, List<CartItem> items);
     }
 }
