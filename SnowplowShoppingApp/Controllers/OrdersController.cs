@@ -48,6 +48,7 @@ namespace SnowplowShoppingApp.Controllers
                 Quantity = addToCartModel.Quantity
             });
 
+            //track the add to cart event
             _trackingService.TrackCartActionEvent(userId, product, addToCartModel.Quantity, "add");
 
             return Ok();
@@ -56,6 +57,7 @@ namespace SnowplowShoppingApp.Controllers
         [HttpGet("cartitems/{userId}")]
         public IEnumerable<CartItem> GetCartItemsForUser(Guid userId)
         {
+            _trackingService.TrackPageViewEvent("orders/cartitems", "Get cart items for user");
             return CartItems.ContainsKey(userId) ? CartItems[userId] : new List<CartItem>();
         }
 
@@ -68,6 +70,7 @@ namespace SnowplowShoppingApp.Controllers
 
             CartItems[userId].Remove(cartItem);
 
+            //track the remove from cart event
             _trackingService.TrackCartActionEvent(userId, cartItem.Product, cartItem.Quantity, "remove");
             return Ok();
         }
@@ -81,6 +84,8 @@ namespace SnowplowShoppingApp.Controllers
             //track the order
             var user = await _usersRepo.GetUserByIdAsync(makeOrderModel.UserId);
             var items = CartItems[user.UserId];
+
+            //track the make order event
             _trackingService.TrackUserOrderEvent(user, items);
 
             CartItems.Remove(makeOrderModel.UserId);

@@ -23,6 +23,7 @@ namespace SnowplowShoppingApp.Controllers
         [HttpGet()]
         public async Task<IEnumerable<Product>> GetAllProducts()
         {
+            //tack the page view event
             _trackingService.TrackPageViewEvent("api/products", "Get All Products");
             return await _productsRepo.GetAllProductsAsync();
         }

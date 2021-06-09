@@ -32,11 +32,12 @@ namespace SnowplowShoppingApp.Controllers
             var user = await _userRepo.LoginAsync(loginModel.Email, loginModel.Password);
             if (user == null)
             {
+                //invalid login, track the unsuccessful login event
                 _trackingService.TrackUserUnsuccessfulLoginEvent(loginModel.Email);
                 return BadRequest("Invalid email or password");
             }
-                
-
+            
+            //track the user successful login event
             _trackingService.TrackUserLoginEvent(loginModel.Email);
             return Ok(user);
         }
@@ -44,6 +45,7 @@ namespace SnowplowShoppingApp.Controllers
         [HttpPost("logout")]
         public IActionResult Logout([FromBody] LogoutModel logoutModel)
         {
+            //nothing in particular happens here, we just track the user logout event
             _trackingService.TrackUserLogoutEvent(logoutModel.Email);
             return Ok();
         }
