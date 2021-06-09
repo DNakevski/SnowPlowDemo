@@ -4,6 +4,7 @@ import {Layout} from "./components/Layout";
 import Cart from "./components/Cart/Cart";
 import ProductsList from "./components/Product/ProductsList";
 import Login from "./components/Login";
+import {PrivateRoute} from "./hoc/PrivateRoute";
 
 import "./custom.css";
 
@@ -44,15 +45,23 @@ export default class App extends Component {
   render() {
     return (
       <Layout>
-        <Route exact path="/">
-          <ProductsList addToCart={this.addToCart} />
-        </Route>
-        <Route path="/cart">
-          <Cart
-            items={this.state.cartItems}
-            removeCartItem={this.removeCartItem}
-          />
-        </Route>
+        <PrivateRoute
+          exact={true}
+          path="/"
+          render={(props) => (
+            <ProductsList {...props} addToCart={this.addToCart} />
+          )}
+        />
+        <PrivateRoute
+          exact={false}
+          path="/cart"
+          render={(props) => (
+            <Cart
+              items={this.state.cartItems}
+              removeCartItem={this.removeCartItem}
+            />
+          )}
+        />
         <Route path="/login">
           <Login />
         </Route>

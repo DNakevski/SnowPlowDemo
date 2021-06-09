@@ -9,6 +9,7 @@ import {
   NavLink,
 } from "reactstrap";
 import {Link} from "react-router-dom";
+import {LOGGED_USER} from "../constants";
 import "./NavMenu.css";
 
 export class NavMenu extends Component {
@@ -30,6 +31,10 @@ export class NavMenu extends Component {
   }
 
   render() {
+    const loginLinkText = localStorage.getItem(LOGGED_USER)
+      ? "Logout"
+      : "Login";
+
     const cartItems = localStorage.getItem("cart-items");
     let cCount = 0;
     if (cartItems !== null) {
@@ -61,6 +66,11 @@ export class NavMenu extends Component {
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/cart">
                     Cart <span className="badge badge-primary">{cCount}</span>
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} className="text-dark" to="/login">
+                    {loginLinkText}
                   </NavLink>
                 </NavItem>
               </ul>
