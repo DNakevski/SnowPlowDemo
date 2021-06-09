@@ -22,6 +22,7 @@ export default class App extends Component {
     super(props);
     this.state = {
       cartItems: cartItems,
+      isUserLoggedIn: false,
     };
   }
 
@@ -40,6 +41,10 @@ export default class App extends Component {
     const tmpCartItems = this.state.cartItems.filter((x) => x !== item);
     localStorage.setItem("cart-items", JSON.stringify(tmpCartItems));
     this.setState({cartItems: tmpCartItems});
+  };
+
+  setUserLoggedIn = (isLoggedIn) => {
+    this.setState({isUserLoggedIn: isLoggedIn});
   };
 
   render() {
@@ -63,7 +68,7 @@ export default class App extends Component {
           )}
         />
         <Route path="/login">
-          <Login />
+          <Login setUserLoggedIn={this.setUserLoggedIn} />
         </Route>
       </Layout>
     );

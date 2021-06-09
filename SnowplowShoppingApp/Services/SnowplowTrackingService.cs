@@ -2,24 +2,78 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using Snowplow.Tracker;
+using Snowplow.Tracker.Emitters;
+using Snowplow.Tracker.Endpoints;
+using Snowplow.Tracker.Models;
+using Snowplow.Tracker.Models.Adapters;
+using Snowplow.Tracker.Models.Events;
+using Snowplow.Tracker.Queues;
+using Snowplow.Tracker.Storage;
+using SnowplowShoppingApp.Models;
 
 namespace SnowplowShoppingApp.Services
 {
     public class SnowplowTrackingService : ITrackingService
     {
-        public void RegisterUserLogin(string userEmail)
+        private readonly SnowplowConfig _config;
+
+        public SnowplowTrackingService(IOptions<SnowplowConfig> config)
         {
-            throw new NotImplementedException();
+            _config = config.Value;
         }
 
-        public void RegisterUserLogout(string userEmail)
+        public Tracker TrackerInstance
         {
-            throw new NotImplementedException();
+            get
+            {
+                //if the tracker instance is started return the started instance
+                if (Tracker.Instance.Started) return Tracker.Instance;
+
+                //else, configure the tracker, start it and return it
+                var endpoint = new SnowplowHttpCollectorEndpoint(_config.Endpoint, method: HttpMethod.POST);
+                var storage = new LiteDBStorage(_config.LiteDbStorage);
+                var queue = new PersistentBlockingQueue(storage, new PayloadToJsonString());
+                var emitter = new AsyncEmitter(endpoint, queue);
+                var subject = new Subject().SetLang(_config.Language).SetPlatform(Platform.Web);
+                Tracker.Instance.Start(emitter, subject, trackerNamespace: _config.TrackerNamespace, appId: _config.AppId);
+
+                return Tracker.Instance;
+            }
         }
 
-        public void RegisterUserUnsuccessfulLogin(string userEmail)
+        public void TrackUserLogin(string userEmail)
         {
-            throw new NotImplementedException();
+            TrackerInstance.Track(new Structured()
+                .SetCategory("users")
+                .SetAction("user-login-success")
+                .SetLabel(userEmail)
+                .SetProperty("user-email")
+                .SetTrueTimestamp(new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds())
+                .Build());
+        }
+
+        public void TrackUserLogout(string userEmail)
+        {
+            TrackerInstance.Track(new Structured()
+                .SetCategory("users")
+                .SetAction("user-logout")
+                .SetLabel(userEmail)
+                .SetProperty("user-email")
+                .SetTrueTimestamp(new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds())
+                .Build());
+        }
+
+        public void TrackUserUnsuccessfulLogin(string userEmail)
+        {
+            TrackerInstance.Track(new Structured()
+                .SetCategory("users")
+                .SetAction("user-login-fail")
+                .SetLabel(userEmail)
+                .SetProperty("user-email")
+                .SetTrueTimestamp(new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds())
+                .Build());
         }
     }
 }

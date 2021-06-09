@@ -1,13 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using SnowplowShoppingApp.Models;
 using SnowplowShoppingApp.Repositories;
+using SnowplowShoppingApp.Services;
 
 namespace SnowplowShoppingApp.Controllers
 {
@@ -16,10 +12,12 @@ namespace SnowplowShoppingApp.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserRepo _userRepo;
+        private readonly ITrackingService _trackingService;
 
-        public UsersController(IUserRepo userRepo)
+        public UsersController(IUserRepo userRepo, ITrackingService trackingService)
         {
             _userRepo = userRepo;
+            _trackingService = trackingService;
         }
 
         [HttpGet]
@@ -35,7 +33,15 @@ namespace SnowplowShoppingApp.Controllers
             if (user == null)
                 return BadRequest("Invalid email or password");
 
+            _trackingService.TrackUserLogin(loginModel.Email);
             return Ok(user);
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout([FromBody] LogoutModel logoutModel)
+        {
+            _trackingService.TrackUserLogout(logoutModel.Email);
+            return Ok();
         }
     }
 }

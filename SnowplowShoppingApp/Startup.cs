@@ -5,7 +5,16 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Snowplow.Tracker;
+using Snowplow.Tracker.Emitters;
+using Snowplow.Tracker.Endpoints;
+using Snowplow.Tracker.Models;
+using Snowplow.Tracker.Models.Adapters;
+using Snowplow.Tracker.Queues;
+using Snowplow.Tracker.Storage;
+using SnowplowShoppingApp.Models;
 using SnowplowShoppingApp.Repositories;
+using SnowplowShoppingApp.Services;
 
 namespace SnowplowShoppingApp
 {
@@ -30,9 +39,16 @@ namespace SnowplowShoppingApp
                 configuration.RootPath = "ClientApp/build";
             });
 
+            //register the Snowplow configuration from appsettings.json
+            services.Configure<SnowplowConfig>(Configuration.GetSection("SnowplowConfig"));
+
             //register the repositories
             services.AddSingleton<IProductsRepo, ProductsRepo>();
             services.AddSingleton<IUserRepo, UserRepo>();
+
+            //register the services
+            services.AddScoped<ITrackingService, SnowplowTrackingService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

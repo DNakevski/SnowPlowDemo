@@ -7,8 +7,8 @@ namespace SnowplowShoppingApp.Services
 {
     public interface ITrackingService
     {
-        void RegisterUserLogin(string userEmail);
-        void RegisterUserLogout(string userEmail);
-        void RegisterUserUnsuccessfulLogin(string userEmail);
+        void TrackUserLogin(string userEmail);
+        void TrackUserLogout(string userEmail);
+        void TrackUserUnsuccessfulLogin(string userEmail);
     }
 }

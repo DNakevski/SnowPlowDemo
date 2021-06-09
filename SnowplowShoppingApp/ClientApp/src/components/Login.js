@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {useHistory} from "react-router-dom";
 import {useSnackbar} from "notistack";
-import {login} from "../services/UserService";
+import {login, logout} from "../services/UserService";
 import {LOGGED_USER} from "../constants";
 
 const Login = (props) => {
@@ -33,14 +33,24 @@ const Login = (props) => {
           variant: "success",
         });
 
+        props.setUserLoggedIn(true);
         history.push("/");
       }
     });
   };
 
   useEffect(() => {
-    //clear the user from local storage on first render
-    localStorage.removeItem(LOGGED_USER);
+    //logout and clear the user from local storage user is present in local storage at first render
+    if (localStorage.getItem(LOGGED_USER) !== null) {
+      const user = JSON.parse(localStorage.getItem(LOGGED_USER));
+      logout(user.email).then((response) => {
+        localStorage.removeItem(LOGGED_USER);
+        props.setUserLoggedIn(false);
+        enqueueSnackbar("You have been logged out", {
+          variant: "success",
+        });
+      });
+    }
   }, []);
   return (
     <div className="container">
