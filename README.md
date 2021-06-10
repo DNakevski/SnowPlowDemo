@@ -40,3 +40,13 @@ Rest of the tracking service is comprised of the tracking methods. There are six
 - **TrackUserOrderEvent** - Tracks the event when user makes an order. It uses the snowplow built-in **EcommerceTransaction** event with all the products from the order stored as items of type **EcommerceTransactionItem**.
 - **TrackPageViewEvent** - Tracks page view (API endpoints visits) using the built-in **PageView** event.
 - **TrackCartActionEvent** - Tracks the **add to cart** and **remove from cart** events. It uses the **SelfDescribing  (Unstructured)** event type that require custom schema to be registered. For that matter, there is self-hosted repository with custom schema in this exact repo, located in the [iglu folder](https://github.com/DNakevski/SnowPlowDemo/tree/master/iglu). The repository is registered in the [**iglu.json** config file](https://github.com/DNakevski/SnowPlowDemo/blob/master/microconfig/iglu.json) which was used when snowplow micro is started as docker image. 
+
+### Future steps
+I really wanted to try out the javascript tracker and do some tracking on the frontend as well as combining tracking activities from frontend and backend. It is a bit shame that I didn't get it up and running on the first run. I saw that it has some really nice and interesting features. I will be continuing my efforts on that part and all the changes will be added to this repo.
+Another thing that I want to try out whenever I get bit more time is implementing custom context in the events as well as custom events.  It really broadened my perspective on what all can be traced as event from reading some of the docs. Those experiments will also be added to this repo.
+
+### Conclusion 
+It is a bit late and I might be missing something :). That being said, I am really looking forward talking to you guys so I can elaborate a bit more on the solution and get some feedback from you as well. In the meantime I will update the repo if there are some pending changes.
+I really like the snowplow analytics tool. It was a positive surprise to see the broad range of platforms Snowplow supports. Especially given the fact that there are twenty(and something) engineers working in Snowplow. Also, the efforts that the guys are making on the open source project and keeping all those repos nice and clean is for admiration(kudos). It is privilege to work and grow in environment like that.
+
+Regards and looking forward to your feedback.
