@@ -61,10 +61,10 @@ namespace SnowplowShoppingApp.Repositories
                 new User
                 {
                     UserId = new Guid("222B0228-4D0D-4C23-8B49-01A698857709"),
-                    Name = "Scott",
-                    Surname = "Walker",
+                    Name = "Jack",
+                    Surname = "Milgarm",
                     Email = "scott@mail.com",
-                    Password = "Scott*123",
+                    Password = "Jack*123",
                     City = "Edinburgh",
                     Country = "Scotland",
                     State = "Scotland"
