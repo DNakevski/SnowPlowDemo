@@ -46,7 +46,4 @@ I really wanted to try out the javascript tracker and do some tracking on the fr
 Another thing that I want to try out whenever I get bit more time is implementing custom context in the events as well as custom events.  It really broadened my perspective on what all can be traced as event from reading some of the docs. Those experiments will also be added to this repo.
 
 ### Conclusion 
-It is a bit late and I might be missing something :). That being said, I am really looking forward talking to you guys so I can elaborate a bit more on the solution and get some feedback from you as well. In the meantime I will update the repo if there are some pending changes.
-I really like the snowplow analytics tool. It was a positive surprise to see the broad range of platforms Snowplow supports. Especially given the fact that there are twenty(and something) engineers working in Snowplow. Also, the efforts that the guys are making on the open source project and keeping all those repos nice and clean is for admiration(kudos). It is privilege to work and grow in environment like that.
-
-Regards and looking forward to your feedback.
+It is a bit late and I might be missing something :). But I really like the snowplow analytics tool. It was a positive surprise to see the broad range of platforms Snowplow supports.
