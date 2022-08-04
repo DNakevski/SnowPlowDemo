@@ -2,7 +2,7 @@
 
 _Simple Reactjs/.net Core shopping app that demonstrates usage of snowplow service to track events within the application_.
 
-My initial idea was to make very simple Reactjs application that will use the snowplow javascript tracker in order to encapsulate the basic concepts and principles about event tracking using the [snowplow micro](https://github.com/snowplow-incubator/snowplow-micro/). However, while setting it up I encountered some issues and I was just not able to get it working with snowplow micro.  I spent some time checking [these examples](https://github.com/snowplow-incubator/snowplow-micro-examples) but no luck.  After some time I decided to just implement simple backend on the react app. I thought about going with Node.js, but because it's been a while since I did something in Node.js/Typescript and I am probably bit rusty on that terrain I decided to go with C# and use the [C# snowplow tracker](https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/net-tracker/) for the sake of time and convenience :).  
+My initial idea was to make very simple Reactjs application that will use the snowplow javascript tracker in order to encapsulate the basic concepts and principles about event tracking using the [snowplow micro](https://github.com/snowplow-incubator/snowplow-micro/). However, while setting it up I encountered some issues and I was just not able to get it working with snowplow micro.  I spent some time checking [these examples](https://github.com/snowplow-incubator/snowplow-micro-examples) but no luck.  After some time I decided to just implement simple backend on the react app. I decided to go with C# and use the [C# snowplow tracker](https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/net-tracker/) for the sake of time and convenience :).  
 
 
 ## Snowplow micro setup
@@ -40,10 +40,3 @@ Rest of the tracking service is comprised of the tracking methods. There are six
 - **TrackUserOrderEvent** - Tracks the event when user makes an order. It uses the snowplow built-in **EcommerceTransaction** event with all the products from the order stored as items of type **EcommerceTransactionItem**.
 - **TrackPageViewEvent** - Tracks page view (API endpoints visits) using the built-in **PageView** event.
 - **TrackCartActionEvent** - Tracks the **add to cart** and **remove from cart** events. It uses the **SelfDescribing  (Unstructured)** event type that require custom schema to be registered. For that matter, there is self-hosted repository with custom schema in this exact repo, located in the [iglu folder](https://github.com/DNakevski/SnowPlowDemo/tree/master/iglu). The repository is registered in the [**iglu.json** config file](https://github.com/DNakevski/SnowPlowDemo/blob/master/microconfig/iglu.json) which was used when snowplow micro is started as docker image. 
-
-### Future steps
-I really wanted to try out the javascript tracker and do some tracking on the frontend as well as combining tracking activities from frontend and backend. It is a bit shame that I didn't get it up and running on the first run. I saw that it has some really nice and interesting features. I will be continuing my efforts on that part and all the changes will be added to this repo.
-Another thing that I want to try out whenever I get bit more time is implementing custom context in the events as well as custom events.  It really broadened my perspective on what all can be traced as event from reading some of the docs. Those experiments will also be added to this repo.
-
-### Conclusion 
-It is a bit late and I might be missing something :). But I really like the snowplow analytics tool. It was a positive surprise to see the broad range of platforms Snowplow supports.
